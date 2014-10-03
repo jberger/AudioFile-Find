@@ -11,10 +11,7 @@ WriteMakefile(
     PL_FILES            => {},
     PREREQ_PM => {
         'Test::More'                                     => 0,
-		'AudioFile::Info'                                => 1.09,
-		'AudioFile::Info::MP3::Info'                     => 1.04,
-		'AudioFile::Info::Audio::WMA'                    => 0.1,
-		'AudioFile::Info::Ogg::Vorbis::Header::PurePerl' => 1.05,
+		    'AudioFile::Info'                                => 1.09,
     },	
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'AudioFile-Find-*' },

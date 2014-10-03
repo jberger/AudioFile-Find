@@ -1,8 +1,0 @@
-Changes
-MANIFEST
-Makefile.PL
-README
-lib/AudioFile/Find.pm
-bin/findaudio
-t/00-load.t
-META.yml                                 Module meta-data (added by MakeMaker)

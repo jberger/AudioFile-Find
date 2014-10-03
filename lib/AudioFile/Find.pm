@@ -6,7 +6,7 @@ use strict;
 use File::Find::Rule;
 use AudioFile::Info;
 use List::MoreUtils qw( zip );
-use Data::Dumper;
+use YAML 'LoadFile';
 
 =head1 NAME
 
@@ -79,7 +79,8 @@ sub search {
 	my $args = {@_};
 	my %audio;
 			
-	for ( File::Find::Rule->file()->name( '*.mp3', '*.ogg', '*.wma' )->in( $dir || $self->dir || '.' ) )
+  my @patterns = map { "*.$_" } $self->extensions;
+	for ( File::Find::Rule->file()->name( @patterns )->in( $dir || $self->dir || '.' ) )
 	{
 		my $info = AudioFile::Info->new($_);
 		
@@ -92,7 +93,7 @@ sub search {
 
 =head2 pass
 
-Checks wether a given AudioFile::Info-Object meets given criteria. First argument is the Info-Object, 
+Checks whether a given AudioFile::Info-Object meets given criteria. First argument is the Info-Object, 
 second argument is a reference to the criteria hash.
 
 =cut
@@ -100,8 +101,6 @@ second argument is a reference to the criteria hash.
 sub pass
 {
 	my ($self, $file, $criteria) = @_;
-	
-	my $crit = Dumper($criteria);
 	
 	while ( my ($key, $criterium) = each %$criteria ) 
 	{
@@ -122,6 +121,21 @@ sub pass
 	}
 	
 	return 1;
+}
+
+=head2 extensions
+
+Discovers the extensions that are supported by the installed L<AudioFile::Info> plugins.
+
+=cut
+
+sub extensions {
+  my ($self) = @_;
+  my $path = $INC{'AudioFile/Info.pm'};
+  $path =~ s/Info.pm$/plugins.yaml/;
+  my $config = LoadFile($path);
+  my @extension = keys %{ $config->{default} };
+  return @extensions;
 }
 
 =head1 AUTHOR
