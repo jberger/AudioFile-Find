@@ -21,6 +21,7 @@ sub create_test_file {
 subtest 'mock usage' => sub {
   my $dir  = File::Temp->newdir;
   my $file = create_test_file($dir, 'song.mp3');
+  my $bad  = create_test_file($dir, 'flop.bad');
 
   no warnings 'redefine';
   local *AudioFile::Find::extensions = sub { my @ext = ('mp3'); return @ext };
@@ -29,15 +30,17 @@ subtest 'mock usage' => sub {
   subtest 'dir attribute' => sub {
     my $finder = AudioFile::Find->new("$dir");
     isa_ok $finder, 'AudioFile::Find';
-    my ($found, undef) = $finder->search;
-    is $found, $file, 'found test file';
+    my %found = $finder->search;
+    is keys(%found), 1, 'found one file';
+    is_deeply \%found, {$file => 1}, 'found test file';
   };
 
   subtest 'dir argument' => sub {
     my $finder = AudioFile::Find->new;
     isa_ok $finder, 'AudioFile::Find';
-    my ($found, undef) = $finder->search("$dir");
-    is $found, $file, 'found test file';
+    my %found = $finder->search("$dir");
+    is keys(%found), 1, 'found one file';
+    is_deeply \%found, {$file => 1}, 'found test file';
   };
 };
 
