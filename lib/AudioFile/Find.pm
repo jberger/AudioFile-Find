@@ -10,7 +10,7 @@ use YAML 'LoadFile';
 
 =head1 NAME
 
-AudioFile::Find - Find audio files located on your system and maps them to L<AudioFile::Info> objects. 
+AudioFile::Find - Finds audio files located on your system and maps them to L<AudioFile::Info> objects. 
 
 =cut
 
