@@ -26,20 +26,20 @@ our $VERSION = '0.01';
 
     my $finder = AudioFile::Find->new( 'some/dir' );
     
-	# find everything
-	my @audiofiles = $finder->search();
-	
-	# specify a search directory
-	my @audiofiles = $finder->search( 'some/other/dir' );
-	
-	#same for genre, title, track, artist and album
-	my @audiofiles = $finder->search( artist => 'Seeed' ); 
-	
-	#search using a regex
-	my @audiofiles = $finder->search( 'some/other/dir', title => qr/Ding/ ); 
-	
-	# anonymous subroutine that returns true or false
-	my @audiofiles = $finder->search( 'some/other/dir', track => sub { return shift > 10; } ); 
+  # find everything
+  my @audiofiles = $finder->search();
+  
+  # specify a search directory
+  my @audiofiles = $finder->search( 'some/other/dir' );
+  
+  #same for genre, title, track, artist and album
+  my @audiofiles = $finder->search( artist => 'Seeed' ); 
+  
+  #search using a regex
+  my @audiofiles = $finder->search( 'some/other/dir', title => qr/Ding/ ); 
+  
+  # anonymous subroutine that returns true or false
+  my @audiofiles = $finder->search( 'some/other/dir', track => sub { return shift > 10; } ); 
 
 =head1 METHODS
 
@@ -50,8 +50,8 @@ Creates an object of this class. Takes an optional single argument which is the 
 =cut
 
 sub new {
-	my ($class, $dir) = @_;
-	return bless { dir => $dir }, $class;
+  my ($class, $dir) = @_;
+  return bless { dir => $dir }, $class;
 }
 
 =head2 new
@@ -61,9 +61,9 @@ Sets and returns the directory to search.
 =cut
 
 sub dir {
-	my ($self, $dir) = @_;
-	$self->{dir} = $dir if defined $dir;
-	return $self->{dir};
+  my ($self, $dir) = @_;
+  $self->{dir} = $dir if defined $dir;
+  return $self->{dir};
 }
 
 =head2 search 
@@ -74,21 +74,21 @@ and also pass a hash with search criteria. See the synopsis for details.
 =cut
 
 sub search {
-	my $self = shift;
-	my $dir  = @_ % 2 == 0 ? '' : shift;
-	my $args = {@_};
-	my %audio;
-			
+  my $self = shift;
+  my $dir  = @_ % 2 == 0 ? '' : shift;
+  my $args = {@_};
+  my %audio;
+      
   my @patterns = map { "*.$_" } $self->extensions;
-	for ( File::Find::Rule->file()->name( @patterns )->in( $dir || $self->dir || '.' ) )
-	{
-		my $info = AudioFile::Info->new($_);
-		
-		$audio{$_} = $info
-			if $self->pass( $info, $args);
-	}
-	
-	return %audio;
+  for ( File::Find::Rule->file()->name( @patterns )->in( $dir || $self->dir || '.' ) )
+  {
+    my $info = AudioFile::Info->new($_);
+    
+    $audio{$_} = $info
+      if $self->pass( $info, $args);
+  }
+  
+  return %audio;
 }
 
 =head2 pass
@@ -100,27 +100,27 @@ second argument is a reference to the criteria hash.
 
 sub pass
 {
-	my ($self, $file, $criteria) = @_;
-	
-	while ( my ($key, $criterium) = each %$criteria ) 
-	{
-		my $value = $file->$key;
-		
-		if ( ref($criterium) eq "Regexp" )
-		{
-			return unless $value =~ $criterium;
-		}
-		elsif ( ref($criterium) eq "CODE" )
-		{
-			return unless $criterium->( $file->$key );
-		}
-		else
-		{
-			return unless $file->$key eq $criterium;
-		}
-	}
-	
-	return 1;
+  my ($self, $file, $criteria) = @_;
+  
+  while ( my ($key, $criterium) = each %$criteria ) 
+  {
+    my $value = $file->$key;
+    
+    if ( ref($criterium) eq "Regexp" )
+    {
+      return unless $value =~ $criterium;
+    }
+    elsif ( ref($criterium) eq "CODE" )
+    {
+      return unless $criterium->( $file->$key );
+    }
+    else
+    {
+      return unless $file->$key eq $criterium;
+    }
+  }
+  
+  return 1;
 }
 
 =head2 extensions
