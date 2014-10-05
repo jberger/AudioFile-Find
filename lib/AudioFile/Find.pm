@@ -10,21 +10,17 @@ use YAML 'LoadFile';
 
 =head1 NAME
 
-AudioFile::Find - Find Audiofiles located on your harddisk. Supports MP3, WMA and Ogg Vorbis files.
-
-=head1 VERSION
-
-Version 0.01
+AudioFile::Find - Find audio files located on your system and maps them to L<AudioFile::Info> objects. 
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
-    use AudioFile::Find;
+  use AudioFile::Find;
 
-    my $finder = AudioFile::Find->new( 'some/dir' );
+  my $finder = AudioFile::Find->new( 'some/dir' );
     
   # find everything
   my @audiofiles = $finder->search();
@@ -68,7 +64,8 @@ sub dir {
 
 =head2 search 
 
-Starts the search and returns a hash of filenames as keys and AudioFile::Info-Objects as values. You may specify a search directory as the first argument 
+Starts the search and returns a hash of filenames as keys and AudioFile::Info-Objects as values.
+You may specify a search directory as the first argument 
 and also pass a hash with search criteria. See the synopsis for details.
 
 =cut
@@ -93,8 +90,8 @@ sub search {
 
 =head2 pass
 
-Checks whether a given AudioFile::Info-Object meets given criteria. First argument is the Info-Object, 
-second argument is a reference to the criteria hash.
+Checks whether a given L<AudioFile::Info> object meets given criteria.
+First argument is the L<AudioFile::Info> object, second argument is a reference to the criteria hash.
 
 =cut
 
@@ -112,11 +109,11 @@ sub pass
     }
     elsif ( ref($criterium) eq "CODE" )
     {
-      return unless $criterium->( $file->$key );
+      return unless $criterium->( $value );
     }
     else
     {
-      return unless $file->$key eq $criterium;
+      return unless $value eq $criterium;
     }
   }
   
@@ -138,60 +135,40 @@ sub extensions {
   return @ext;
 }
 
-=head1 AUTHOR
+1;
 
-Markus, C<< <holli.holzer at googlemail.com> >>
+=head1 AUTHORS
 
-=head1 BUGS
+=over 
 
-Please report any bugs or feature requests to C<bug-audiofile-find at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=AudioFile-Find>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+=item Markus, C<< <holli.holzer at googlemail.com> >>
 
-
-
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc AudioFile::Find
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=AudioFile-Find>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/AudioFile-Find>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/AudioFile-Find>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/AudioFile-Find>
+=item Joel Berger C<joel.a.berger@gmail.com>
 
 =back
 
+=head1 SOURCE REPOSITORY
 
-=head1 ACKNOWLEDGEMENTS
+L<http://github.com/jberger/AudioFile-Find>
 
+=head1 BUGS
+
+Bugs may be reported to:
+
+=over
+
+=item L<http://github.com/jberger/AudioFile-Find/issues>
+
+=item L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=AudioFile-Find>
+
+=back
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2008 Markus 'holli' Holzer, all rights reserved.
+Copyright 2008-2014 by Authors listed above, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
-
 =cut
 
-1; # End of AudioFile::Find
