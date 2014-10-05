@@ -134,8 +134,8 @@ sub extensions {
   my $path = $INC{'AudioFile/Info.pm'};
   $path =~ s/Info.pm$/plugins.yaml/;
   my $config = LoadFile($path);
-  my @extension = keys %{ $config->{default} };
-  return @extensions;
+  my @ext = keys %{ $config->{default} };
+  return @ext;
 }
 
 =head1 AUTHOR

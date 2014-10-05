@@ -1,5 +1,8 @@
 Revision history for AudioFile-Find
 
-0.01    2008-12-05
-        First version, released on an unsuspecting world.
+0.02  
+  - Discover available plugins rather than hard-code
+
+0.01  2008-12-05
+  - First version, released on an unsuspecting world.
 
