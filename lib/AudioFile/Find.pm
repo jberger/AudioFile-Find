@@ -14,7 +14,8 @@ AudioFile::Find - Finds audio files located on your system and maps them to L<Au
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
+$VERSION = eval $VERSION;
 
 =head1 SYNOPSIS
 
@@ -130,7 +131,7 @@ sub extensions {
   my ($self) = @_;
   my $path = $INC{'AudioFile/Info.pm'};
   $path =~ s/Info.pm$/plugins.yaml/;
-  my $config = LoadFile($path);
+  my $config = eval { LoadFile($path) } or return;
   my @ext = keys %{ $config->{default} };
   return @ext;
 }
